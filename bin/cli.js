@@ -4,6 +4,8 @@ import { defer } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { sortImports } from "../src/sort-imports.js";
 import { readTypeScriptFiles } from "../src/read-typescript-files.js";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 const args = process.argv.slice(2);
 
