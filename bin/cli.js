@@ -15,7 +15,6 @@ const args = process.argv.slice(2);
 defer(() => {
   const filePath = args[0];
 
-  console.log("no filePath args");
   if (filePath) {
     console.log(`target file: ${filePath}`);
     return sortImports(filePath);
@@ -23,7 +22,12 @@ defer(() => {
 
   return readTypeScriptFiles(process.cwd()).pipe(
     mergeMap((tsFilePath) => {
+      console.log(`target file: ${filePath}`);
       return sortImports(tsFilePath);
     })
   );
-}).subscribe();
+}).subscribe({
+  complete:()=>{
+    console.log("sort-imports complete");
+  }
+});
