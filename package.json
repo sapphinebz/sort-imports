@@ -5,12 +5,16 @@
   "bin": {
     "sort-imports": "bin/cli.js"
   },
+  "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "node bin/cli.js C:\\Dev\\lc-underwriter-workbench\\workbench-fe\\src\\app\\error-sidepanel-tab\\error-with-api\\error-with-api.component.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "rxjs": "^7.8.1"
+  }
 }
