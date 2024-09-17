@@ -1,39 +1,29 @@
 #!/usr/bin/env node
 
-import { distinctSetOfImportContext } from "../src/distinct-set-of-import-context.js";
-import { sortingImportStatement } from "../src/sorting-import-statement.js";
-import { readStatements } from "../src/read-statements.js";
-import { switchMap } from "rxjs";
-import { writeStatements } from "../src/write-statements.js";
-
-// import path from 'node:path';
+import { defer} from "rxjs";
+import { mergeMap } from "rxjs/operators";
+import { sortImports } from "../src/sort-imports.js";
+import { readTypeScriptFiles } from "../src/read-typescript-files.js";
 
 const args = process.argv.slice(2);
 
-if (args.length === 0) {
-  console.log("Please provide a file name.");
-  process.exit(1);
-}
+// if (args.length === 0) {
+//   console.log("Please provide a file name.");
+//   process.exit(1);
+// }
 
-const filePath = args[0];
+defer(() => {
+  const filePath = args[0];
 
-readStatements(filePath)
-  .pipe(
-    switchMap(({ importString, contentWithoutImports }) => {
-      const [singleSet, multiplesSet] =
-        distinctSetOfImportContext(importString);
-      const resultsMultiplesSet = sortingImportStatement(multiplesSet, true);
-      const resultsSingleSet = sortingImportStatement(singleSet, false);
+  if (filePath) {
+    return sortImports(filePath);
+  }
 
-      const finalResult =
-        Array.from(resultsMultiplesSet)
-          .concat(Array.from(resultsSingleSet))
-          .join(";\n") + ";";
-
-      return writeStatements(
-        filePath,
-        `${finalResult}\n${contentWithoutImports}`
-      );
-    })
-  )
-  .subscribe();
+  // const __filename = fileURLToPath(import.meta.url);
+  // const __dirname = path.dirname(__filename);
+  const __dirname =
+    "C:\\Dev\\lc-underwriter-workbench\\workbench-fe\\src\\app\\error-sidepanel-tab";
+  return readTypeScriptFiles(__dirname).pipe(
+    mergeMap((tsFilePath) => sortImports(tsFilePath))
+  );
+}).subscribe();

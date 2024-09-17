@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node bin/cli.js C:\\Dev\\lc-underwriter-workbench\\workbench-fe\\src\\app\\error-sidepanel-tab\\error-with-api\\error-with-api.component.ts",
+    "start": "node bin/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
