@@ -17,6 +17,7 @@ const args = process.argv.slice(2);
 defer(() => {
   const filePath = args[0];
 
+  console.log('no filePath args');
   if (filePath) {
     console.log(`target file: ${filePath}`);
     return sortImports(filePath);
@@ -24,6 +25,7 @@ defer(() => {
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
+  console.log(`target directory: ${__dirname}`);
   return readTypeScriptFiles(__dirname).pipe(
     mergeMap((tsFilePath) => {
       console.log(`target file: ${filePath}`);
