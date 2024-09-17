@@ -18,12 +18,16 @@ defer(() => {
   const filePath = args[0];
 
   if (filePath) {
+    console.log(`target file: ${filePath}`);
     return sortImports(filePath);
   }
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   return readTypeScriptFiles(__dirname).pipe(
-    mergeMap((tsFilePath) => sortImports(tsFilePath))
+    mergeMap((tsFilePath) => {
+      console.log(`target file: ${filePath}`);
+      return sortImports(tsFilePath);
+    })
   );
 }).subscribe();
