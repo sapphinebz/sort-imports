@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "bin": {
-    "sort-imports": "./index.js"
+    "sort-imports": "node ./index.js"
   },
   "scripts": {
     "start": "node index.js",
