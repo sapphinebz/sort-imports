@@ -22,7 +22,7 @@ defer(() => {
 
   return readTypeScriptFiles(process.cwd()).pipe(
     mergeMap((tsFilePath) => {
-      console.log(`target file: ${filePath}`);
+      console.log(`target file: ${tsFilePath}`);
       return sortImports(tsFilePath);
     })
   );
