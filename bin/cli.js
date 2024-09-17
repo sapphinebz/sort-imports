@@ -4,8 +4,6 @@ import { defer } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { sortImports } from "../src/sort-imports.js";
 import { readTypeScriptFiles } from "../src/read-typescript-files.js";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
 
 const args = process.argv.slice(2);
 
@@ -17,18 +15,14 @@ const args = process.argv.slice(2);
 defer(() => {
   const filePath = args[0];
 
-  console.log('no filePath args');
+  console.log("no filePath args");
   if (filePath) {
     console.log(`target file: ${filePath}`);
     return sortImports(filePath);
   }
 
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  console.log(`target directory: ${__dirname}`);
-  return readTypeScriptFiles(__dirname).pipe(
+  return readTypeScriptFiles(process.cwd()).pipe(
     mergeMap((tsFilePath) => {
-      console.log(`target file: ${filePath}`);
       return sortImports(tsFilePath);
     })
   );
