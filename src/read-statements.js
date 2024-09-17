@@ -1,6 +1,21 @@
 import { Observable } from "rxjs";
 import fs from "node:fs";
 
+function distinctImport(results, content) {
+  const startIndex = content.search(/import[\n\s]+\{/);
+  const fromIndex = content.search(/from[\n\s]+\'[^']+\'[\n\s]*;/);
+  if (startIndex !== -1 && fromIndex !== -1) {
+    const endIndex = content.search(/\;/);
+    const semicolonIndex = endIndex + 1;
+    const importStatement = content.substring(startIndex, semicolonIndex);
+    results.push(importStatement);
+    const newContent = content.replace(importStatement, "");
+    return distinctImport(results, newContent);
+  }
+
+  return content;
+}
+
 export function readStatements(filePath) {
   return new Observable((subscriber) => {
     // Read the file asynchronously
@@ -10,19 +25,13 @@ export function readStatements(filePath) {
         return;
       }
 
-      // Regular expression to match the import statements
-      const importRegex = /^import .* from .*;$/gm;
+      let results = [];
+      const newcontent = distinctImport(results, data);
 
-      // Find all import statements
-      const importStatements = data.match(importRegex);
-
-      // Join import statements into a single string
-      const importString = importStatements ? importStatements.join("\n") : "";
-
-      // Remove import statements from the original content
-      const contentWithoutImports = data.replace(importRegex, "").trim();
-
-      subscriber.next({ importString, contentWithoutImports });
+      subscriber.next({
+        importStatements: results,
+        contentWithoutImports: newcontent,
+      });
       subscriber.complete();
     });
   });

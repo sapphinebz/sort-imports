@@ -1,25 +1,34 @@
-import { distinctSetOfImportContext } from "../src/distinct-set-of-import-context.js";
 import { sortingImportStatement } from "../src/sorting-import-statement.js";
 import { readStatements } from "../src/read-statements.js";
-import { mergeMap } from "rxjs";
+import { mergeMap, EMPTY } from "rxjs";
 import { writeStatements } from "../src/write-statements.js";
+import { distinctImportStatement } from "../src/distinct-import-statement.js";
 
 export function sortImports(filePath) {
   return readStatements(filePath).pipe(
-    mergeMap(({ importString, contentWithoutImports }) => {
-      const [singleSet, multiplesSet] =
-        distinctSetOfImportContext(importString);
+    mergeMap(({ importStatements, contentWithoutImports }) => {
+      // สร้าง Sets สำหรับเก็บ import statements
+      const multiplesSet = new Set();
+      const singleSet = new Set();
+
+      distinctImportStatement(importStatements, singleSet, multiplesSet);
+
       const resultsMultiplesSet = sortingImportStatement(multiplesSet, true);
       const resultsSingleSet = sortingImportStatement(singleSet, false);
 
-      const finalResult =
-        Array.from(resultsMultiplesSet)
-          .concat(Array.from(resultsSingleSet))
-          .join(";\n") + ";";
+      let finalResult = "";
+
+      for (const result of resultsMultiplesSet) {
+        finalResult += `${result};\n`;
+      }
+
+      for (const result of resultsSingleSet) {
+        finalResult += `${result};\n`;
+      }
 
       return writeStatements(
         filePath,
-        `${finalResult}\n${contentWithoutImports}`
+        `${finalResult.trim()}\n\n${contentWithoutImports.trim()}`
       );
     })
   );

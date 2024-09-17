@@ -1,17 +1,22 @@
-const DISTINCT_IMPORT_STATEMENT = /^import\s+{([^}]+)}\s+from\s+['"][^'"]+['"]/;
-export function distinctImportStatement(importStatement, singleSet, multiplesSet) {
-    const importMatch = importStatement.match(
-        DISTINCT_IMPORT_STATEMENT
-    );
+export function distinctImportStatement(
+  importStatements,
+  singleSet,
+  multiplesSet
+) {
+  for (const statement of importStatements) {
+    const matched = /^import[\s\n]+\{([^}]+)\}/.exec(statement);
+    const importMatch = matched[1];
     if (importMatch) {
-      const imports = importMatch[1].split(",").map((item) => item.trim());
+      const imports = importMatch
+        .replace(/[\s\n]/g, "")
+        .split(",")
+        .filter((item) => Boolean(item.trim()));
+
       if (imports.length > 1) {
-        multiplesSet.add(importStatement);
-      } else {
-        singleSet.add(importStatement);
+        multiplesSet.add(statement);
+      } else if (imports.length === 1) {
+        singleSet.add(statement);
       }
-    } else {
-      singleSet.add(importStatement);
     }
   }
-  
+}
