@@ -1,5 +1,5 @@
 const EXTRACT_IMPORT_STATEMENT_REGEXP =
-  /import\s*{([^}]*)}\s*from\s*['"]([^'"]+)['"]/;
+  /import\s*{\s*([^}]*)\s*}\s*from\s*['"]([^'"]+)['"]/;
 export function extractImportStatement(inputString) {
   const matches = inputString.match(EXTRACT_IMPORT_STATEMENT_REGEXP);
   if (matches) {
