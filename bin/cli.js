@@ -27,7 +27,7 @@ defer(() => {
       const stats = fs.statSync(inputCli);
       if (stats.isDirectory()) {
         console.log(`${inputCli} is a directory.`);
-        filePath = directoryPath;
+        directoryPath = inputCli;
       } else if (stats.isFile()) {
         console.log(`${inputCli} is a file.`);
         filePath = inputCli;
