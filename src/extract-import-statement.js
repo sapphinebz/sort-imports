@@ -4,10 +4,12 @@ export function extractImportStatement(inputString) {
   const matches = inputString.match(EXTRACT_IMPORT_STATEMENT_REGEXP);
   if (matches) {
     // Group 1: Items in the import statement
-    const items = matches[1]
-      .split(",")
-      .map((item) => item.trim())
-      .filter((item) => item !== "");
+    let items = [];
+    for (const item of matches[1].split(/\s*,\s*/)) {
+      if (item !== "") {
+        items.push(item);
+      }
+    }
 
     // Group 2: Path after the 'from' keyword
     const path = matches[2];
