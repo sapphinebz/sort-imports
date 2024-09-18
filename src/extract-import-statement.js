@@ -5,7 +5,8 @@ export function extractImportStatement(inputString) {
   if (matches) {
     // Group 1: Items in the import statement
     let items = [];
-    for (const item of matches[1].split(/\s*,\s*/)) {
+    const importItems = matches[1]?.trim();
+    for (const item of importItems.split(/\s*,\s*/)) {
       if (item !== "") {
         items.push(item);
       }
