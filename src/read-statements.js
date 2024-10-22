@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import fs from "node:fs";
 
 function distinctImport(results, content) {
-  const startIndex = content.search(/import[\n\s]+\{/);
+  const startIndex = content.search(/import[\n\s]+(?:\{)?/);
   const fromIndex = content.search(/from[\n\s]+\'[^']+\'[\n\s]*;/);
   if (startIndex !== -1 && fromIndex !== -1) {
     const endIndex = content.search(/\;/);
